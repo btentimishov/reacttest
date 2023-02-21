@@ -1,28 +1,35 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import PersonList from './PersonList';
+import PersonDetail from './PersonDetail';
+import PersonForm from './PersonForm';
 
-function App() {
-  const [person, setPerson] = useState(null);
-  console.log(person)
-
-  useEffect(() => {
-    fetch('http://localhost:3000/person')
-      .then(response => response.json())
-      .then(person => setPerson(person))
-      .catch(error => console.error(error));
-  }, []);
+const App = () => {
   return (
-    <div>
-      {person ? (
-        <div>
-      <h1>{person.name}</h1>
-      <p>Surname: {person.surname}</p>
-      <p>Age: {person.age}</p>
-      <p>Occupation: {person.occupation}</p>
-    </div>      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+    <BrowserRouter>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/people">People</Link>
+            </li>
+            <li>
+              <Link to="/people/new">Add Person</Link>
+            </li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path="/people/new" element={<PersonForm/>} />
+          <Route path="/people/:id" element={<PersonDetail/>} />
+          <Route path="/people" element={<PersonList/>} />
+          <Route path="/" render={<h1>Welcome to the Home Page</h1>} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
